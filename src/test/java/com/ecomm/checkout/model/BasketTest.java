@@ -10,7 +10,6 @@ public class BasketTest {
         Assertions.assertTrue(basket.getProducts().isEmpty());
         basket.addProduct(new Product());
         Assertions.assertEquals(1, basket.getProducts().size());
-        Assertions.fail();
     }
 
     @Test
