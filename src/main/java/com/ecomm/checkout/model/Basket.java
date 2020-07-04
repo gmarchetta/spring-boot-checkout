@@ -4,8 +4,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A POJO representing a Basket.
+ */
 public class Basket {
     private Long id;
+    private Long userId;
+    private BasketStatus status;
     private List<Product> products;
     private LocalDate created;
     private LocalDate expiration;
@@ -24,6 +29,22 @@ public class Basket {
         this.id = id;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public BasketStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(BasketStatus status) {
+        this.status = status;
+    }
+
     public List<Product> getProducts() {
         return products;
     }
@@ -40,6 +61,10 @@ public class Basket {
         return expiration;
     }
 
+    /**
+     * Convenient method to add a product to the basket
+     * @param product
+     */
     public void addProduct(Product product) {
         this.products.add(product);
     }

@@ -2,10 +2,22 @@ package com.ecomm.checkout.model;
 
 import java.math.BigDecimal;
 
+/**
+ * A POJO modeling the product entity.
+ */
 public class Product {
+    private Long id;
     private ProductType productType;
     private BigDecimal price;
     private String productName;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public ProductType getProductType() {
         return productType;
