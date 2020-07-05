@@ -29,12 +29,4 @@ public interface BasketRepository {
      * @return the basket for the specified id, or null if it does not exist
      */
     Basket findById(Long id);
-
-    /**
-     * Finds a basket in DB owned by the specified User
-     *
-     * @param userId id of the user owning this basket
-     * @return a basket belonging to this user
-     */
-    Basket findByUserId(Long userId);
 }
