@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /**
  * Class containing integration tests for BasketController. It will spin up a server and send requests to it, parsing
- * the response and doing assertions on it.
+ * responses and doing assertions on them.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BasketControllerIntegrationTest {
@@ -35,5 +37,36 @@ public class BasketControllerIntegrationTest {
         Assertions.assertNotNull(basket.getExpiration());
         Assertions.assertTrue(basket.getProducts().isEmpty());
         Assertions.assertEquals(BasketStatus.DRAFT, basket.getStatus());
+    }
+
+    @Test
+    public void testRequestToDeleteNonExistingBasketNotFound() {
+        ResponseEntity response = this.restTemplate.exchange("http://localhost:" + port + "/basket/1",
+                HttpMethod.DELETE, new HttpEntity(null), String.class);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void testRequestToDeleteExistingDraftBasketSuccess() {
+        ResponseEntity<Basket> createResponse = this.restTemplate.postForEntity("http://localhost:" + port + "/basket",
+                "", Basket.class);
+        Basket createdBasket = createResponse.getBody();
+        ResponseEntity deleteResponse =
+                this.restTemplate.exchange("http://localhost:" + port + "/basket/" + createdBasket.getId(),
+                HttpMethod.DELETE, new HttpEntity(null), String.class);
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, deleteResponse.getStatusCode());
+    }
+
+    @Test
+    public void testRequestToDeleteExistingCancelledBasketBasketNotFound() {
+        ResponseEntity<Basket> createResponse = this.restTemplate.postForEntity("http://localhost:" + port + "/basket",
+                "", Basket.class);
+        Basket createdBasket = createResponse.getBody();
+        this.restTemplate.exchange("http://localhost:" + port + "/basket/" + createdBasket.getId(),
+                HttpMethod.DELETE, new HttpEntity(null), String.class);
+        ResponseEntity deleteResponse =
+                this.restTemplate.exchange("http://localhost:" + port + "/basket/" + createdBasket.getId(),
+                        HttpMethod.DELETE, new HttpEntity(null), String.class);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, deleteResponse.getStatusCode());
     }
 }
