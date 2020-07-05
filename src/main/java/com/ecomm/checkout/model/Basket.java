@@ -9,7 +9,6 @@ import java.util.List;
  */
 public class Basket {
     private Long id;
-    private Long userId;
     private BasketStatus status;
     private List<Product> products;
     private LocalDate created;
@@ -27,14 +26,6 @@ public class Basket {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public BasketStatus getStatus() {

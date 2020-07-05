@@ -1,7 +1,6 @@
 package com.ecomm.checkout.repository;
 
 import com.ecomm.checkout.model.Basket;
-import com.ecomm.checkout.model.BasketStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -41,23 +40,5 @@ public class BasketRepositoryImpl implements BasketRepository {
      */
     public Basket findById(Long id) {
         return baskets.get(id);
-    }
-
-    /**
-     * Method to find draft basket by its owner id. Implementation is awful but enough for the test. On a real DB
-     * queries would be better
-     * @param userId
-     * @return
-     */
-    public Basket findByUserId(Long userId) {
-        Basket result = null;
-        for(Basket basket : baskets.values()) {
-            if(basket.getUserId() == userId && BasketStatus.DRAFT == basket.getStatus()) {
-                result = basket;
-                break;
-            }
-        }
-
-        return result;
     }
 }
