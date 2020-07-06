@@ -1,5 +1,6 @@
 package com.ecomm.checkout.controller;
 
+import com.ecomm.checkout.controller.requests.AddProductDto;
 import com.ecomm.checkout.model.Basket;
 import com.ecomm.checkout.model.BasketStatus;
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +36,7 @@ public class BasketControllerIntegrationTest {
         Assertions.assertNotNull(basket.getId());
         Assertions.assertNotNull(basket.getCreated());
         Assertions.assertNotNull(basket.getExpiration());
-        Assertions.assertTrue(basket.getProducts().isEmpty());
+        Assertions.assertTrue(basket.getBasketItems().isEmpty());
         Assertions.assertEquals(BasketStatus.DRAFT, basket.getStatus());
     }
 
@@ -68,5 +69,34 @@ public class BasketControllerIntegrationTest {
                 this.restTemplate.exchange("http://localhost:" + port + "/basket/" + createdBasket.getId(),
                         HttpMethod.DELETE, new HttpEntity(null), String.class);
         Assertions.assertEquals(HttpStatus.NOT_FOUND, deleteResponse.getStatusCode());
+    }
+
+    @Test
+    public void testRequestToAddProductToBasketSuccess() {
+        AddProductDto dto = new AddProductDto();
+        dto.setProductId(1L);
+        dto.setQuantity(2L);
+
+        ResponseEntity<Basket> createBasketResponse = this.restTemplate.postForEntity("http://localhost:" + port +
+                        "/basket", "", Basket.class);
+        Assertions.assertEquals(HttpStatus.CREATED, createBasketResponse.getStatusCode());
+        Basket basket = createBasketResponse.getBody();
+        Assertions.assertTrue(basket.getBasketItems().isEmpty());
+
+        ResponseEntity<Basket> addProductResponse =
+                this.restTemplate.postForEntity("http://localhost:" + port + "/basket/" + basket.getId() + "/products", dto,
+                Basket.class);
+        Basket basketWithProduct = addProductResponse.getBody();
+        Assertions.assertEquals(1L, basketWithProduct.getBasketItems().size());
+        Assertions.assertEquals(2L, basketWithProduct.getBasketItems().get(0).getQuantity());
+        Assertions.assertEquals(1L, basketWithProduct.getBasketItems().get(0).getProduct().getId());
+
+        ResponseEntity<Basket> secondAddProductResponse =
+                this.restTemplate.postForEntity("http://localhost:" + port + "/basket/" + basket.getId() + "/products", dto,
+                        Basket.class);
+        basketWithProduct = secondAddProductResponse.getBody();
+        Assertions.assertEquals(1L, basketWithProduct.getBasketItems().size());
+        Assertions.assertEquals(4L, basketWithProduct.getBasketItems().get(0).getQuantity());
+        Assertions.assertEquals(1L, basketWithProduct.getBasketItems().get(0).getProduct().getId());
     }
 }
