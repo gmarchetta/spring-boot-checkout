@@ -1,14 +1,13 @@
 package com.ecomm.checkout.controller;
 
+import com.ecomm.checkout.controller.requests.AddProductDto;
 import com.ecomm.checkout.model.Basket;
 import com.ecomm.checkout.service.BasketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Class for handling requests for the Basket model. It has a dependency with the BasketService which is responsible 
@@ -29,5 +28,12 @@ public class BasketController {
     public ResponseEntity deleteBasket(@PathVariable Long basketId) {
         basketService.deleteBasket(basketId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/basket/{basketId}/products")
+    public ResponseEntity<Basket> addProductToBasket(@PathVariable Long basketId,
+                                                    @RequestBody AddProductDto productDto) {
+        Basket basket = basketService.addProductToBasket(productDto.getProductId(), basketId, productDto.getQuantity());
+        return new ResponseEntity(basket, HttpStatus.CREATED);
     }
 }

@@ -10,14 +10,14 @@ import java.util.List;
 public class Basket {
     private Long id;
     private BasketStatus status;
-    private List<Product> products;
+    private List<BasketItem> items;
     private LocalDate created;
     private LocalDate expiration;
 
     public Basket() {
         this.created = LocalDate.now();
         this.expiration = created.plusDays(2);
-        products = new ArrayList<>();
+        items = new ArrayList<>();
     }
 
     public Long getId() {
@@ -36,12 +36,12 @@ public class Basket {
         this.status = status;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<BasketItem> getBasketItems() {
+        return items;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setBasketItems(List<BasketItem> items) {
+        this.items = items;
     }
 
     public LocalDate getCreated() {
@@ -56,7 +56,16 @@ public class Basket {
      * Convenient method to add a product to the basket
      * @param product
      */
-    public void addProduct(Product product) {
-        this.products.add(product);
+    public void addProduct(Product product, Long quantity) {
+        BasketItem item =
+                this.items.stream().filter(currentItem -> product.getId() == currentItem.getProduct().getId()).findAny().orElse(null);
+
+        if(item == null) {
+            item = new BasketItem();
+            item.setProduct(product);
+            this.items.add(item);
+        }
+
+        item.setQuantity(item.getQuantity()+quantity);
     }
 }
