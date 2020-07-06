@@ -99,4 +99,26 @@ public class BasketControllerIntegrationTest {
         Assertions.assertEquals(4L, basketWithProduct.getBasketItems().get(0).getQuantity());
         Assertions.assertEquals(1L, basketWithProduct.getBasketItems().get(0).getProduct().getId());
     }
+
+    @Test
+    public void testRequestToGetTotalAfterAddingTwoProductsSuccess() {
+        Basket basket =
+                this.restTemplate.postForEntity("http://localhost:" + port + "/basket", "", Basket.class).getBody();
+
+        AddProductDto dto = new AddProductDto();
+        dto.setProductId(1L);
+        dto.setQuantity(2L);
+        this.restTemplate.postForEntity("http://localhost:" + port + "/basket/" + basket.getId() + "/products", dto,
+                Basket.class);
+
+        dto = new AddProductDto();
+        dto.setProductId(2L);
+        dto.setQuantity(2L);
+        this.restTemplate.postForEntity("http://localhost:" + port + "/basket/" + basket.getId() + "/products", dto,
+                Basket.class);
+
+        String total = this.restTemplate.getForEntity("http://localhost:" + port + "/basket/" + basket.getId() +
+                        "/total", String.class).getBody();
+        Assertions.assertEquals("€50.00", total);
+    }
 }

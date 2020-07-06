@@ -36,4 +36,10 @@ public class BasketController {
         Basket basket = basketService.addProductToBasket(productDto.getProductId(), basketId, productDto.getQuantity());
         return new ResponseEntity(basket, HttpStatus.CREATED);
     }
+
+    @GetMapping("/basket/{basketId}/total")
+    public ResponseEntity<String> getBasketTotal(@PathVariable Long basketId) {
+        String basketTotal = basketService.getBasketTotal(basketId);
+        return new ResponseEntity(basketTotal, HttpStatus.OK);
+    }
 }

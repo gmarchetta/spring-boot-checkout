@@ -15,8 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * Class containing unit tests for BasketController. Dependencies are mocked so we can scope tests to the Controller
@@ -73,5 +72,13 @@ public class BasketControllerTest {
         } catch(BasketAlreadyConfirmedException e) {
             verify(basketService, VerificationModeFactory.times(1)).deleteBasket(1L);
         }
+    }
+
+    @Test
+    public void testGetBasketTotalSuccess() {
+        given(basketService.getBasketTotal(anyLong())).willReturn("€100.00");
+        ResponseEntity<String> response = basketController.getBasketTotal(1L);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals("€100.00", response.getBody());
     }
 }
