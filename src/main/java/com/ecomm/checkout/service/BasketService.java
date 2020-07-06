@@ -3,11 +3,16 @@ package com.ecomm.checkout.service;
 import com.ecomm.checkout.exception.BasketAlreadyConfirmedException;
 import com.ecomm.checkout.exception.ResourceNotFoundException;
 import com.ecomm.checkout.model.Basket;
+import com.ecomm.checkout.model.BasketItem;
 import com.ecomm.checkout.model.BasketStatus;
 import com.ecomm.checkout.model.Product;
 import com.ecomm.checkout.repository.BasketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Currency;
 
 /**
  * Business logic class for performing operations on Basket
@@ -63,6 +68,23 @@ public class BasketService {
         basket.addProduct(product, quantity);
         basketRepository.save(basket);
         return basket;
+    }
+
+    public String getBasketTotal(Long basketId) {
+        Basket basket = basketRepository.findById(basketId);
+        BigDecimal amount = BigDecimal.ZERO;
+        for(BasketItem item : basket.getBasketItems()) {
+            amount = amount.add(item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity())));
+        }
+
+        return localizeMoney(amount);
+    }
+
+    public String localizeMoney(BigDecimal amount) {
+        Currency euro = Currency.getInstance("EUR");
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        format.setCurrency(euro);
+        return format.format(amount);
     }
 
     private Basket findById(Long basketId) {
