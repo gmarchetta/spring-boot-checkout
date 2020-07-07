@@ -13,7 +13,8 @@ The products that the site currently offers are pens, tshirts and mugs.
 ### Starting the app
 1) Install Docker
 2) Clone this repo
-3) Build with gradle: ```./gradlew build && java -jar build/libs/checkout-docker.jar```
+3) Build with gradle: ```./gradlew build```
+4) Create jar file for the image: ```mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)```
 4) Build the image: ```docker build --build-arg DEPENDENCY=build/dependency -t ecomm/checkout-docker .```
 5) Run the image: ```docker run -p 8080:8080 ecomm/checkout-docker```
 
