@@ -13,8 +13,9 @@ The products that the site currently offers are pens, tshirts and mugs.
 ### Starting the app
 1) Install Docker
 2) Clone this repo
-3) Build the image: ```docker build --build-arg DEPENDENCY=build/dependency -t ecomm/checkout-docker .```
-4) Run the image: ```docker run -p 8080:8080 ecomm/checkout-docker```
+3) Build with gradle: ```./gradlew build && java -jar build/libs/checkout-docker.jar```
+4) Build the image: ```docker build --build-arg DEPENDENCY=build/dependency -t ecomm/checkout-docker .```
+5) Run the image: ```docker run -p 8080:8080 ecomm/checkout-docker```
 
 ### Stack
 This repository contains a microservice needed to perform operations related to a checkout basket. The technical stack is:
