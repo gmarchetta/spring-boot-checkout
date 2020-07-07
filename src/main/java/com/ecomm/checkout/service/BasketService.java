@@ -7,6 +7,7 @@ import com.ecomm.checkout.model.BasketItem;
 import com.ecomm.checkout.model.BasketStatus;
 import com.ecomm.checkout.model.Product;
 import com.ecomm.checkout.repository.BasketRepository;
+import com.ecomm.checkout.service.sales.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,9 @@ public class BasketService {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private SalesService salesService;
 
     /**
      * Creates a new basket object, sets its status to draft and stores it in persistence.
@@ -70,11 +74,18 @@ public class BasketService {
         return basket;
     }
 
+    /**
+     * Method that calculates the total amount for a basket identified by the specified basketId, subtracting
+     * discounts for any active sale that applies to the basket
+     * @param basketId identifier for the basket for which we want to know the total amount
+     * @return the localized amount in euros
+     */
     public String getBasketTotal(Long basketId) {
         Basket basket = basketRepository.findById(basketId);
         BigDecimal amount = BigDecimal.ZERO;
         for(BasketItem item : basket.getBasketItems()) {
             amount = amount.add(item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity())));
+            amount = amount.subtract(salesService.calculateDiscount(item));
         }
 
         return localizeMoney(amount);

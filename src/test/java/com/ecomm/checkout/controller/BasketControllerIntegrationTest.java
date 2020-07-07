@@ -121,4 +121,27 @@ public class BasketControllerIntegrationTest {
                         "/total", String.class).getBody();
         Assertions.assertEquals("€50.00", total);
     }
+
+    @Test
+    public void testRequestToGetTotalAfterAddingFourPensDiscountAppliesSuccess() {
+        Basket basket =
+                this.restTemplate.postForEntity("http://localhost:" + port + "/basket", "", Basket.class).getBody();
+
+        AddProductDto dto = new AddProductDto();
+        dto.setProductId(1L);
+        dto.setQuantity(2L);
+        this.restTemplate.postForEntity("http://localhost:" + port + "/basket/" + basket.getId() + "/products", dto,
+                Basket.class);
+
+        dto = new AddProductDto();
+        dto.setProductId(1L);
+        dto.setQuantity(2L);
+        this.restTemplate.postForEntity("http://localhost:" + port + "/basket/" + basket.getId() + "/products", dto,
+                Basket.class);
+
+        String total = this.restTemplate.getForEntity("http://localhost:" + port + "/basket/" + basket.getId() +
+                "/total", String.class).getBody();
+        // 4 pens at 5 each. Total would be 20, but we get one for free due to sale. So total is 15
+        Assertions.assertEquals("€15.00", total);
+    }
 }
