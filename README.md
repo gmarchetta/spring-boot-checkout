@@ -49,6 +49,10 @@ Due to business constraints, the repository layer is not implemented using a rea
 
 Part of the business logic is the Sales "framework". It was implemented using the strategy pattern so new sale calculators could be added easily. See the scaling the app section below for more details.
 
+#### Discounts - Sequence
+
+![Discounts sequence](https://ibb.co/YXMRvnf)
+
 ### Tests
 All classes include unit tests. These focus on the components on isolation, using Mockito to stub dependencies and focusing on the classes at test, doing assertions on results and verifying mocks executions.
 
