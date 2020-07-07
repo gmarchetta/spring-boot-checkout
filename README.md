@@ -51,7 +51,7 @@ Part of the business logic is the Sales "framework". It was implemented using th
 
 #### Discounts - Sequence
 
-![Discounts sequence](https://ibb.co/YXMRvnf)
+![Discounts sequence](https://user-images.githubusercontent.com/10438941/86717378-81e0a800-bff8-11ea-886b-869f92594291.png)
 
 ### Tests
 All classes include unit tests. These focus on the components on isolation, using Mockito to stub dependencies and focusing on the classes at test, doing assertions on results and verifying mocks executions.
