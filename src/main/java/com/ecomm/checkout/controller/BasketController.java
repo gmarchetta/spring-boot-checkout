@@ -34,7 +34,7 @@ public class BasketController {
     public ResponseEntity<Basket> addProductToBasket(@PathVariable Long basketId,
                                                     @RequestBody AddProductDto productDto) {
         Basket basket = basketService.addProductToBasket(productDto.getProductId(), basketId, productDto.getQuantity());
-        return new ResponseEntity(basket, HttpStatus.CREATED);
+        return new ResponseEntity(basket, HttpStatus.OK);
     }
 
     @GetMapping("/basket/{basketId}/total")
