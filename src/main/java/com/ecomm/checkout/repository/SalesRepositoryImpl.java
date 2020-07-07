@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Interface defining database operations that can be done on Sales. On a later stage of development this
@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Repository
 public class SalesRepositoryImpl implements SalesRepository {
-    private Map<Long, Sale> sales = new HashMap<>();
+    private Map<Long, Sale> sales = new ConcurrentHashMap<>();
     private Long nextId = 1L;
 
     /**

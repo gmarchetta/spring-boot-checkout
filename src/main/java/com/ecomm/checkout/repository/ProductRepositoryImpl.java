@@ -5,8 +5,8 @@ import com.ecomm.checkout.model.ProductType;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * In memory data repository initialized with available products. Contains a few methods to add and fetch products to
@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
-    private Map<Long, Product> products = new HashMap<>();
+    private Map<Long, Product> products = new ConcurrentHashMap<>();
     private Long nextId = 1L;
 
     /**
