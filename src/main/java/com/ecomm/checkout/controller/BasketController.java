@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * for the business logic. No business logic should live here, only logic related to the web layer
  */
 @Controller
+@CrossOrigin
 public class BasketController {
     @Autowired
     private BasketService basketService;
