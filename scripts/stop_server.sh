@@ -1,4 +1,4 @@
 #!/bin/bash
 
-service cdk-app stop
+service checkout stop
 exit 0
