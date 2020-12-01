@@ -1,0 +1,15 @@
+name: '"AWS CodeBuild run build" Action For GitHub Actions'
+description: 'Execute CodeBuild::startBuild for the current repo.'
+branding:
+  icon: 'cloud'
+  color: 'orange'
+inputs:
+  project-name:
+    description: 'Checkout'
+    required: true
+outputs:
+  aws-build-id:
+    description: 'The AWS CodeBuild Build ID for this build.'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
