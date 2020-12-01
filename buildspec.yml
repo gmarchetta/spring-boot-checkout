@@ -1,6 +1,6 @@
 version: 0.1
 plaintext:
-  JAVA_HOME: "/opt/jdk1.8.0_192"
+  JAVA_HOME: "/Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home"
 phases:
   install:
     run-as: root
